@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Isochrone depuis la Motte-du-Caire</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Mapbox GL JS -->
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <!-- Mapbox Assembly permet de charger le la feuille de style CSS prédéfinit -->
+    <link
+      href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.js"></script>
+	
+<link rel="stylesheet" href="isochrone.css"> <!-- J'appelle mon fichier CSS dans le même dossier -->
+  </head>
+
+  <body>
+  <header>
+		<a href='https://iut.univ-amu.fr/fr/sites-geographiques/digne'><img src='data:image/png;base64,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' alt='logo IUT'>
+		</a>
+</header>
+	
+	
+		
+	<h1><b>Isochrone depuis la Motte-du-Caire</b></h1>
+	
+	
+	<main>
+	<section>
+    <div id="map"></div>
+
+    <div class="absolute fl my24 mx24 py24 px24 bg-gray-faint round"> <!-- La classe est absolute -->
+      <form id="params">
+        <h4 class="txt-m txt-bold mb6">Mode de transport:</h4>
+        <div class="mb12 mr12 toggle-group align-center">
+          <label class="toggle-container">
+            <input name="profile" type="radio" value="walking" />
+            <div class="toggle toggle--active-null toggle--null">A pied</div>
+          </label>
+          <label class="toggle-container">
+            <input name="profile" type="radio" value="cycling"  />
+            <div class="toggle toggle--active-null toggle--null">A vélo</div>
+          </label>
+          <label class="toggle-container">
+            <input name="profile" type="radio" value="driving" checked /> <!-- Je paramètre par défaut avec checked ce paramètre coché lors de l'affichage -->
+            <div class="toggle toggle--active-null toggle--null">En voiture</div>
+          </label>
+        </div>
+        <h4 class="txt-m txt-bold mb6">Choissisez une durée maximale:</h4>
+        <div class="mb12 mr12 toggle-group align-center">
+          <label class="toggle-container">
+            <input name="duration" type="radio" value="10" checked /> <!-- Je paramètre par défaut avec checked ce paramètre coché lors de l'affichage -->
+			<div class="toggle toggle--active-null toggle--null">10 min</div>
+          </label>
+          <label class="toggle-container">
+            <input name="duration" type="radio" value="20" />
+            <div class="toggle toggle--active-null toggle--null">20 min</div>
+          </label>
+          <label class="toggle-container">
+            <input name="duration" type="radio" value="30" />
+            <div class="toggle toggle--active-null toggle--null">30 min</div>
+          </label>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      mapboxgl.accessToken = 'pk.eyJ1IjoiZGFibzIyIiwiYSI6ImNremltNXR2aTMxaG0ydW8xYmcwOGU3YjUifQ.33TjJKovMQpZ1dkC0S9K3Q';
+
+      const map = new mapboxgl.Map({
+        container: 'map', // container id
+        style: 'mapbox://styles/mapbox/streets-v12', // stylesheet
+        center: [6.027804, 44.342792], // starting position [lng, lat]
+        zoom: 10 // starting zoom
+      });
+
+      // Target the params form in the HTML
+      const params = document.getElementById('params');
+
+      // Variables par défaut à l'affichage 
+      const urlBase = 'https://api.mapbox.com/isochrone/v1/mapbox/';
+      const lon = 6.027804;
+      const lat = 44.342792;
+      let profile = 'driving-traffic';
+      let minutes = 10;
+
+      // Set up a marker that you can use to show the query's coordinates
+      const marker = new mapboxgl.Marker({
+        'color': '#314ccd'
+      });
+
+      // Create a LngLat object to use in the marker initialization
+      // https://docs.mapbox.com/mapbox-gl-js/api/#lnglat
+      const lngLat = {
+        lon: lon,
+        lat: lat
+      };
+
+      // Create a function that sets up the Isochrone API query then makes a fetch call
+      async function getIso() {
+        const query = await fetch(
+          `${urlBase}${profile}/${lon},${lat}?contours_minutes=${minutes}&polygons=true&access_token=${mapboxgl.accessToken}`,
+          { method: 'GET' }
+        );
+        const data = await query.json();
+        // Set the 'iso' source's data to what's returned by the API query
+        map.getSource('iso').setData(data);
+      }
+
+      // When a user changes the value of profile or duration by clicking a button, change the parameter's value and make the API query again
+      params.addEventListener('change', (event) => {
+        if (event.target.name === 'profile') {
+          profile = event.target.value;
+        } else if (event.target.name === 'duration') {
+          minutes = event.target.value;
+        }
+        getIso();
+      });
+
+      map.on('load', () => {
+        // When the map loads, add the source and layer
+        map.addSource('iso', {
+          type: 'geojson',
+          data: {
+            'type': 'FeatureCollection',
+            'features': []
+          }
+        });
+
+        map.addLayer(  <!-- J'ajoute la couche polygone plein -->
+          {
+            'id': 'isoLayer',
+            'type': 'fill',
+            'source': 'iso',
+            'layout': {},
+            'paint': {
+              'fill-color': '#5a3fc0',
+              'fill-opacity': 0.3
+            }
+          },
+          'poi-label'
+        );
+
+        // Initialize the marker at the query coordinates
+        marker.setLngLat(lngLat).addTo(map);
+
+        // Make the API call
+        getIso();
+      });
+    </script>
+	</section>
+	</main>
+	
+	
+
+	<footer>
+		<a href="mailto:david.bonnet@etu.univ-amu.fr">David BONNET</a>
+	</footer>
+</body>
+</html>
+	
+	
+	
